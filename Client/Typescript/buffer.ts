@@ -31,23 +31,23 @@ namespace Ocean
 
         protected createProgram(vShaderId:string, fShaderId:string, isOcean:boolean)
         {
-            let vshaderScript = document.getElementById(vShaderId);
-            let fshaderScript = document.getElementById(fShaderId);
+            let vshaderScript = document.getElementById(vShaderId)!;
+            let fshaderScript = document.getElementById(fShaderId)!;
 
-            let vShader  = this.gl.createShader(this.gl.VERTEX_SHADER);
+            let vShader  = this.gl.createShader(this.gl.VERTEX_SHADER)!;
             
-            this.gl.shaderSource(vShader, vshaderScript.textContent);
+            this.gl.shaderSource(vShader, vshaderScript.textContent!);
             this.gl.compileShader(vShader);
 
             let fShader  = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-            this.gl.shaderSource(fShader, fshaderScript.textContent);
-            this.gl.compileShader(fShader);
+            this.gl.shaderSource(fShader!, fshaderScript.textContent!);
+            this.gl.compileShader(fShader!);
 
             this.gl.attachShader(this.program, vShader); 
-            this.gl.attachShader(this.program, fShader);
+            this.gl.attachShader(this.program, fShader!);
 
             let vshaderError = this.gl.getShaderInfoLog(vShader);
-            let fshaderError = this.gl.getShaderInfoLog(fShader);
+            let fshaderError = this.gl.getShaderInfoLog(fShader!);
             
             console.log(vshaderError);
             console.log(fshaderError);
