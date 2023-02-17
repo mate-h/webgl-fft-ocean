@@ -1,25 +1,22 @@
 {
-    "compileOnSave": true,
-    "files":[
-        "../Webgl-FFT-Ocean-/Client/Typescript/Licence.js", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/buffer.ts", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/chunck.ts", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/Complex.ts", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/Fourier.ts", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/ocean.ts", 
-        "../Webgl-FFT-Ocean-/Client/Typescript/Phillips.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/texture.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/skybox.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/scene.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/Camera.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/Plot.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/FrameBuffer.ts",
-        "../Webgl-FFT-Ocean-/Client/Typescript/gl-matrix.js"
-    ],
-    "compilerOptions": {
-        "target": "es5",
-        "sourceMap": true,
-        "out": "Client/Javascript/ocean.js",
-        "allowJs": true
-    }
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+  },
+  "include": ["Client"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
