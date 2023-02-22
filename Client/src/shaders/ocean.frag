@@ -63,28 +63,28 @@ void main(void) {
     normal = reflect(normal, -view);
   }
 
-  //REFLECTION
+			//REFLECTION
   vec2 reflectionCoord;
   vec2 refractionCoord;
 
   reflectionCoord.x = 0.5 * (clipSpace.w + clipSpace.x) / clipSpace.w;
   reflectionCoord.y = 0.5 * (clipSpace.w + clipSpace.y) / clipSpace.w;
 
-  //DISTORTION
+			//DISTORTION
   vec4 reflectionTex = texture(reflectionSampler, reflectionCoord + 0.1 * normal.xz);
   vec4 lookup = texture(reflectionSampler, reflectionCoord + 0.1 * normal.xz);
 
   vec3 refraction = SEA_WATER_COLOR;
   vec3 reflection = reflectionTex.xyz; 
 
-  //COOK TORRANCE 
+			//COOK TORRANCE 
   float NdotL = max(dot(normal, lightDir), 0.0);
 
   float specularBRDF = 0.0;
   float refractedBRDF = 0.0;
   float k = 0.1;
 
-  //SPECULAR
+			//SPECULAR
   float NdotH = max(dot(normal, H), 0.0);
   float NdotV = max(dot(normal, view), 0.0);
   float VdotH = max(dot(view, H), 0.0);
@@ -94,7 +94,7 @@ void main(void) {
   float gc = (NH2 * NdotL) / VdotH;
   float geometricalAttenuation = min(1.0, min(gb, gc));
 
-  //DISTRIBUTION
+			//DISTRIBUTION
   float constant = 1.0 / (PI * 0.01 * pow(NdotH, 4.0));
   float exponant = (NdotH * NdotH - 1.0) / (0.01 * NdotH * NdotH);
   float roughness = constant * exp(exponant);
@@ -112,7 +112,7 @@ void main(void) {
   vec3 color = cook + mix(refraction / PI, reflection, fresnelWater) + vec3(0.1, 0.1, 0.1);
   color += vec3(0.05, 0.3, 0.3) * (wPosition.y * 2.0 / (length(camPos.xyz - wPosition.xyz)));
 
-  //HDR
+			//HDR
   color = vec3(1.0) - exp(-1.5 * color);
 
   outputColor = vec4(color, 1.0);

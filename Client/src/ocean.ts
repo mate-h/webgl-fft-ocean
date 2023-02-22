@@ -10,19 +10,19 @@ import { FrameBuffer } from './FrameBuffer'
 import { Phillips } from './Phillips'
 
 export class Engine {
-  gl: any
+  gl: WebGL2RenderingContext
   canvas: HTMLCanvasElement
   wireframe: number
 
-  projMatrix: any
-  viewMatrix: any
-  birdViewMatrix: any
+  projMatrix: mat4
+  viewMatrix: mat4
+  birdViewMatrix: mat4
 
-  invProj: any
-  invView: any
+  invProj: mat4
+  invView: mat4
 
-  ext: ANGLE_instanced_arrays
-  floatExtension: OES_texture_float
+  ext: ANGLE_instanced_arrays | null
+  floatExtension: OES_texture_float | null
 
   displacementTexture: Texture
 
@@ -138,7 +138,7 @@ export class Engine {
     mat4.perspective(this.projMatrix, 55.0, 1.0, 0.1, 4000.0)
     mat4.perspective(this.invProj, 65.0, 1.0, 0.01, 4000.0)
 
-    mat4.lookAt(this.camera.position, this.camera.lookAt, this.camera.up, this.viewMatrix)
+    mat4.lookAt(this.viewMatrix, this.camera.position, this.camera.lookAt, this.camera.up)
 
     mat4.invert(this.viewMatrix, this.invView)
     mat4.invert(this.invProj, this.invProj)
@@ -160,18 +160,18 @@ export class Engine {
 }
 
 window.onload = () => {
-  let canvas = <HTMLCanvasElement>document.getElementById('canvas')
+  let canvas = document.getElementById('canvas') as HTMLCanvasElement
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
 
-  let gl = <any>canvas.getContext('webgl2', { antialias: true })
+  let gl = canvas.getContext('webgl2', { antialias: true })!
   var engine = new Engine(gl, canvas, gl.TRIANGLES)
-
   engine.load()
+
   engine.render()
 
-  let choppiness = <HTMLInputElement>document.getElementById('choppiness')
-  let wireframeButton = <HTMLInputElement>document.getElementById('wireframe')
+  let choppiness = document.getElementById('choppiness') as HTMLInputElement
+  let wireframeButton = document.getElementById('wireframe') as HTMLInputElement
 
   wireframeButton.onchange = (e) => {
     if (engine.wireframe === gl.TRIANGLES) {

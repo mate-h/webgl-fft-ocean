@@ -17,7 +17,7 @@ export class SkyBox extends Buffer {
       this.texture = texture
     })
 
-    super.createProgram('skyBoxVertexShader', 'skyBoxfragmentShader', false)
+    super.createProgram('skyBoxVertexShader', 'skyBoxFragmentShader', false)
   }
 
   public create() {
