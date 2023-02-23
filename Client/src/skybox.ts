@@ -1,3 +1,4 @@
+import { mat4 } from 'gl-matrix'
 import { Buffer } from './buffer'
 import { Texture } from './texture'
 
@@ -73,7 +74,7 @@ export class SkyBox extends Buffer {
     this.gl.useProgram(null)
   }
 
-  public render(projMatrix, viewMatrix, isclipped = false, isReflection = false) {
+  public render(projMatrix: mat4, viewMatrix: mat4, isclipped = false, isReflection = false) {
     this.gl.useProgram(this.program)
 
     if (isReflection) this.gl.uniform4f(this.program.clipPlane, 0, 1, 0, 1.0)

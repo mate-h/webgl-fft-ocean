@@ -352,6 +352,18 @@ var Ocean;
     }());
     Ocean.Engine = Engine;
 })(Ocean || (Ocean = {}));
+
+function logObject(obj) {
+    const info = JSON.stringify(obj, (key, value) => {
+        const arr = ["indices", "vertices", "h0", "h1", "imagedata"]
+        if (arr.includes(key)) {
+            return undefined;
+        }
+        return value;
+    });
+    console.log("[DEBUG]", info);
+}
+
 window.onload = function () {
     var canvas = document.getElementById('canvas');
     canvas.width = window.innerWidth;
@@ -360,6 +372,8 @@ window.onload = function () {
     var engine = new Ocean.Engine(gl, canvas, gl.TRIANGLES);
     engine.load();
     engine.render();
+
+    // logObject(engine);
     var choppiness = document.getElementById("choppiness");
     var wireframeButton = document.getElementById("wireframe");
     wireframeButton.onchange = function (e) {
@@ -2235,4 +2249,3 @@ var Ocean;
     w && (w.glMatrixArrayType = o, w.MatrixArray = o, w.setMatrixArrayType = D, w.determineMatrixArrayType = G, w.glMath = E, w.vec2 = J, w.vec3 = r, w.vec4 = K, w.mat2 = I, w.mat3 = A, w.mat4 = x, w.quat4 = k);
     return { glMatrixArrayType: o, MatrixArray: o, setMatrixArrayType: D, determineMatrixArrayType: G, glMath: E, vec2: J, vec3: r, vec4: K, mat2: I, mat3: A, mat4: x, quat4: k };
 });
-//# sourceMappingURL=ocean.js.map

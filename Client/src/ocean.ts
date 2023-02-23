@@ -47,12 +47,12 @@ export class Engine {
   constructor(gl, canvas, wireframe) {
     this.gl = gl
     this.canvas = canvas
-    this.projMatrix = mat4.create()
-    this.viewMatrix = mat4.create()
-    this.birdViewMatrix = mat4.create()
+    this.projMatrix = mat4.clone(new Float32Array(16).fill(0))
+    this.viewMatrix = mat4.clone(new Float32Array(16).fill(0))
+    this.birdViewMatrix = mat4.clone(new Float32Array(16).fill(0))
 
-    this.invProj = mat4.create()
-    this.invView = mat4.create()
+    this.invProj = mat4.clone(new Float32Array(16).fill(0))
+    this.invView = mat4.clone(new Float32Array(16).fill(0))
 
     this.chunck = new chunck(gl, 512)
 
@@ -72,9 +72,17 @@ export class Engine {
     this.wireframe = wireframe
     this.skybox = new SkyBox(gl, 100)
 
-    this.reflection = new FrameBuffer(window.innerWidth, window.innerHeight, this.gl)
+    this.reflection = new FrameBuffer(
+      window.innerWidth,
+      window.innerHeight,
+      this.gl
+    )
 
-    this.camera = new Camera(vec3.clone([26, 4.0, 326]), vec3.clone([26.417, 4.0, 325.4]), vec3.clone([0, 1, 0]))
+    this.camera = new Camera(
+      vec3.clone([26, 4.0, 326]),
+      vec3.clone([26.417, 4.0, 325.4]),
+      vec3.clone([0, 1, 0])
+    )
     this.birdCamera = new Camera(
       vec3.clone([26, 140, 400.0]),
       vec3.clone([26.417, 131.32, 325.4]),
@@ -115,15 +123,17 @@ export class Engine {
 
   public render() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
-
-    let text = <HTMLInputElement>document.getElementById('camera-height')
-
-    text.value = this.camera.position[1]
-
-    let reflectionMatrix = mat4.clone([1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0])
+    var text = document.getElementById('camera-height') as HTMLInputElement
+    text!.value = this.camera.position[1].toString()
+    // prettier-ignore
+    var reflectionMatrix = mat4.clone([
+        1.0, 0.0, 0.0, 0.0,
+        0.0, -1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
     var reflView = mat4.create()
-    mat4.multiply(this.viewMatrix, reflectionMatrix, reflView)
-
+    mat4.multiply(reflView, this.viewMatrix, reflectionMatrix)
     //REFLECTION FRAMEBUFFER RENDERING
     this.reflection.BeginRenderframeBuffer()
     this.skybox.render(this.projMatrix, reflView, true, false)
@@ -132,17 +142,21 @@ export class Engine {
     //REST OF SCENE
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
     this.skybox.render(this.projMatrix, this.viewMatrix, false, false)
-
     this.generateWaves()
-
     mat4.perspective(this.projMatrix, 55.0, 1.0, 0.1, 4000.0)
     mat4.perspective(this.invProj, 65.0, 1.0, 0.01, 4000.0)
-
-    mat4.lookAt(this.viewMatrix, this.camera.position, this.camera.lookAt, this.camera.up)
-
-    mat4.invert(this.viewMatrix, this.invView)
+    mat4.lookAt(
+      this.viewMatrix,
+      this.camera.position,
+      this.camera.lookAt,
+      this.camera.up
+    )
+    mat4.invert(this.invView, this.viewMatrix)
     mat4.invert(this.invProj, this.invProj)
-
+    this.projMatrix[0] = 1.9209821224212646
+    this.projMatrix[5] = 1.9209821224212646
+    this.invProj[0] = 0.6370702385902405
+    this.invProj[5] = 0.6370702385902405
     this.chunck.Draw(
       this.ext,
       this.wireframe,
@@ -159,6 +173,17 @@ export class Engine {
   }
 }
 
+export function logObject(obj) {
+  const info = JSON.stringify(obj, (key, value) => {
+    const arr = ['indices', 'vertices', 'h0', 'h1', 'imagedata']
+    if (arr.includes(key)) {
+      return undefined
+    }
+    return value
+  })
+  console.log('[DEBUG]', info)
+}
+
 window.onload = () => {
   let canvas = document.getElementById('canvas') as HTMLCanvasElement
   canvas.width = window.innerWidth
@@ -167,7 +192,6 @@ window.onload = () => {
   let gl = canvas.getContext('webgl2', { antialias: true })!
   var engine = new Engine(gl, canvas, gl.TRIANGLES)
   engine.load()
-
   engine.render()
 
   let choppiness = document.getElementById('choppiness') as HTMLInputElement

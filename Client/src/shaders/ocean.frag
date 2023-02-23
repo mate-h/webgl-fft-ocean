@@ -115,6 +115,6 @@ void main(void) {
 			//HDR
   color = vec3(1.0) - exp(-1.5 * color);
 
-  outputColor = vec4(color, 1.0);
+  outputColor = vec4(reflectionTex.rgb, 1.0);
 
 }

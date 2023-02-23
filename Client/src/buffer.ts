@@ -37,16 +37,14 @@ export class Buffer {
     fShaderId: string,
     isOcean: boolean
   ) {
-    const vertex = {
+    const shaders = {
       skyBoxVertexShader,
       vertexShader,
-    };
-    const fragment = {
       skyBoxFragmentShader,
       fragmentShader,
     };
-    let vshaderScript = vertex[vShaderId];
-    let fshaderScript = fragment[fShaderId];
+    let vshaderScript = shaders[vShaderId];
+    let fshaderScript = shaders[fShaderId];
 
     let vShader = this.gl.createShader(this.gl.VERTEX_SHADER)!;
 

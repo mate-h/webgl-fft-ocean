@@ -1,9 +1,9 @@
 import {vec3} from 'gl-matrix'
 
 export class Camera {
-  position: any
-  lookAt: any
-  up: any
+  position: vec3
+  lookAt: vec3
+  up: vec3
 
   angle: number
   pitch: number
