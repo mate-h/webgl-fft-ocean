@@ -1,13 +1,20 @@
+#version 300 es
 precision mediump float;
 precision highp sampler2D;
 
 uniform mat4 projMatrix;
+uniform mat4 viewMatrix;
 uniform mat4 birdviewMatrix;
+
+uniform vec3 cameraPosition;
 
 uniform mat4 invProjMatrix;
 uniform mat4 invViewMatrix;
 
 uniform sampler2D displacement;
+
+in vec3 position;
+in vec2 texCoord;
 
 out vec2 texcoord;
 out vec4 clipSpace;

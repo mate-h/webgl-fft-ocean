@@ -1,7 +1,7 @@
 import skyBoxVertexShader from "./shaders/sky-box.vert";
 import skyBoxFragmentShader from "./shaders/sky-box.frag";
-import vertexShader from "./shaders/ocean.vert";
-import fragmentShader from "./shaders/ocean.frag";
+import vertexShader from "./shaders/ocean-gl.vert";
+import fragmentShader from "./shaders/ocean-gl.frag";
 
 export class Buffer {
   gl: WebGLRenderingContext;

@@ -1,3 +1,4 @@
+#version 300 es
 precision highp float;
 precision highp sampler2D;
 
@@ -14,6 +15,8 @@ in vec4 pos;
 
 in vec4 eyespacePos;
 in vec4 clipSpace;
+
+layout(location = 0) out vec4 outputColor;
 
 vec4 getTexture(sampler2D sampler, vec2 coord) {
   vec4 d0 = texture(sampler, coord);
@@ -112,6 +115,6 @@ void main(void) {
 			//HDR
   color = vec3(1.0) - exp(-1.5 * color);
 
-  gl_FragColor = vec4(vec3(fresnelWater), 1.0);
+  outputColor = vec4(vec3(fresnelWater), 1.0);
 
 }

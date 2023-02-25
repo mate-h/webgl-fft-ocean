@@ -19,6 +19,10 @@ export class Plot {
     this.ctx.putImageData(this.imagedata, 0, 0)
     this.ctx.scale(4.0, 4.0)
     var src = this.canvas.toDataURL('image/png')
-    this.img.src = src
+    try {
+      this.img.src = src
+    } catch (e) {
+      // console.log('[ERROR]', e)
+    }
   }
 }

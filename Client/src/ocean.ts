@@ -44,7 +44,11 @@ export class Engine {
   reflection: FrameBuffer
   refraction?: FrameBuffer
 
-  constructor(gl, canvas, wireframe) {
+  constructor(
+    gl: WebGL2RenderingContext,
+    canvas: HTMLCanvasElement,
+    wireframe: GLenum
+  ) {
     this.gl = gl
     this.canvas = canvas
     this.projMatrix = mat4.clone(new Float32Array(16).fill(0))
@@ -93,7 +97,10 @@ export class Engine {
   }
 
   public load() {
-    this.gl.getExtension('OES_element_index_uint')
+    const result = this.gl.getExtension('OES_element_index_uint')
+    if (!result) {
+      console.error('OES_element_index_uint not supported')
+    }
 
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height)
     this.gl.clearColor(1.0, 1.0, 1.0, 1.0)
@@ -106,25 +113,30 @@ export class Engine {
     this.reflection.CreateFrameBuffer()
   }
 
-  private generateWaves() {
+  public generateWaves() {
     this.frameNumber = window.requestAnimationFrame(() => {
-      this.interval += 1.0 / 6.0
-
-      let spectrum = this.Phillips.update(this.interval, this.h0, this.h1)
-
-      let h = this.fft.Inverse2D(spectrum.h)
-      let x = this.fft.Inverse2D(spectrum.x)
-      let z = this.fft.Inverse2D(spectrum.z)
-
-      this.displacementTexture.texture(x, h, z)
+      this.generateWaveFrame()
       this.render()
     })
+  }
+
+  public generateWaveFrame() {
+    this.interval += 1.0 / 6.0
+
+    let spectrum = this.Phillips.update(this.interval, this.h0, this.h1)
+
+    let h = this.fft.Inverse2D(spectrum.h)
+    let x = this.fft.Inverse2D(spectrum.x)
+    let z = this.fft.Inverse2D(spectrum.z)
+
+    this.displacementTexture.texture(x, h, z)
   }
 
   public render() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
     var text = document.getElementById('camera-height') as HTMLInputElement
-    text!.value = this.camera.position[1].toString()
+    try {text!.value = this.camera.position[1].toString()}
+    catch (e) {}
     // prettier-ignore
     var reflectionMatrix = mat4.clone([
         1.0, 0.0, 0.0, 0.0,
@@ -157,6 +169,50 @@ export class Engine {
     this.projMatrix[5] = 1.9209821224212646
     this.invProj[0] = 0.6370702385902405
     this.invProj[5] = 0.6370702385902405
+    this.chunck.Draw(
+      this.ext,
+      this.wireframe,
+      this.camera,
+      this.projMatrix,
+      this.viewMatrix,
+      this.reflection,
+      this.displacementTexture,
+      this.refraction,
+      this.invProj,
+      this.invView,
+      this.birdViewMatrix
+    )
+  }
+
+  public renderCamera(camera: THREE.PerspectiveCamera) {
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+    return;
+
+    const cameraPos = camera.position.toArray() as vec3;
+    this.viewMatrix = camera.matrixWorldInverse.toArray() as mat4;
+    this.projMatrix = camera.projectionMatrix.toArray() as mat4;
+
+    // prettier-ignore
+    var reflectionMatrix = mat4.clone([
+        1.0, 0.0, 0.0, 0.0,
+        0.0, -1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
+    var reflView = mat4.create()
+    mat4.multiply(reflView, this.viewMatrix, reflectionMatrix)
+    //REFLECTION FRAMEBUFFER RENDERING
+    this.reflection.BeginRenderframeBuffer()
+    this.skybox.render(this.projMatrix, reflView, true, false)
+    this.reflection.EndRenderBuffer()
+
+    //REST OF SCENE
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
+    this.skybox.render(this.projMatrix, this.viewMatrix, false, false)
+    this.generateWaves()
+
+    // changes in the scope of the variables here
+    this.camera.position = cameraPos;
     this.chunck.Draw(
       this.ext,
       this.wireframe,

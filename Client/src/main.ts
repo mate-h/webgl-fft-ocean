@@ -6,7 +6,7 @@ export function main() {
   canvas.height = window.innerHeight
 
   let gl = canvas.getContext('webgl2', { antialias: true })!
-  var engine = new Engine(gl, canvas, gl.TRIANGLES)
+  let engine = new Engine(gl, canvas, gl.TRIANGLES)
   engine.load()
   engine.render()
 
