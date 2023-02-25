@@ -22,7 +22,9 @@ Further work:
  - Better and more realistic scattering should be implemented
  - better UX
  - remove symmetry on the ocean by blending it with perlin noise
- - port the FFT on the GPU
+ - port the FFT on the GPU: 
+  - IDFT Ocean spectrum (Tessendorf) at https://www.shadertoy.com/view/wt2yRd
+  - Ocean surface: Fourier at https://www.shadertoy.com/view/tdSfWG
 
 <img src="https://github.com/mate-h/webgl-fft-ocean/raw/master/waves1.PNG" width="600" style="max-width:100%;">
 <img src="https://github.com/mate-h/webgl-fft-ocean/raw/master/Capture.PNG" width="600" style="max-width:100%;">
