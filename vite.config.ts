@@ -5,7 +5,5 @@ export default defineConfig({
   plugins: [
     glsl()
   ],
-
-  root: 'Client',
 })
 
