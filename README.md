@@ -26,8 +26,8 @@ Further work:
   - IDFT Ocean spectrum (Tessendorf) at https://www.shadertoy.com/view/wt2yRd
   - Ocean surface: Fourier at https://www.shadertoy.com/view/tdSfWG
 
-<img src="https://github.com/mate-h/webgl-fft-ocean/raw/master/waves1.PNG" width="600" style="max-width:100%;">
-<img src="https://github.com/mate-h/webgl-fft-ocean/raw/master/Capture.PNG" width="600" style="max-width:100%;">
+<img src="https://github.com/mate-h/webgl-fft-ocean/raw/main/waves1.PNG" width="600" style="max-width:100%;">
+<img src="https://github.com/mate-h/webgl-fft-ocean/raw/main/Capture.PNG" width="600" style="max-width:100%;">
 
 <br>
 <a href="https://www.youtube.com/watch?v=eGQRCdBPOO4">Video</a>
