@@ -184,6 +184,11 @@ export class Engine {
     )
   }
 
+  /**
+   * Use a ThreeJs camera to render the scene
+   * @param camera PerspectiveCamera
+   * @returns 
+   */
   public renderCamera(camera: THREE.PerspectiveCamera) {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT)
     return;
